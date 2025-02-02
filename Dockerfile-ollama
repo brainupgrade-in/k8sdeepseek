@@ -1,0 +1,14 @@
+FROM ollama/ollama:latest
+
+# Pull the distilled model
+RUN ollama pull deepseek-r1:1.5b
+
+# Expose API port
+EXPOSE 11434
+
+# Start Ollama service
+CMD ["ollama", "serve"]
+
+
+# docker  build -f Dockerfile-ollama -t brainupgrade/ollamadsr1d .
+# docker push brainupgrade/ollamadsr1d

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openweb-ui
+  labels:
+    app: openweb-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openweb-ui
+  template:
+    metadata:
+      labels:
+        app: openweb-ui
+    spec:
+      containers:
+      - name: openweb-ui
+        image: ghcr.io/open-webui/open-webui:main
+        env:
+        - name: OLLAMA_BASE_URL
+          value: "http://ollama-service:11434"  
+        - name: OLLAMA_DEFAULT_MODEL
+          value: "deepseek-r1:1.5b"             
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: openweb-data
+          mountPath: /app/backend/data
+      volumes:
+      - name: openweb-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: openweb-ui-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openweb-ui-service
+spec:
+  selector:
+    app: openweb-ui
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: NodePort
