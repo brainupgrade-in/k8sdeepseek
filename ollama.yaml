@@ -33,19 +33,20 @@ spec:
           value: "You are DeepSeek-R1, a reasoning model. Provide direct answers without detailed reasoning steps or <think> tags."
       volumes:
       - name: ollama-storage
-        persistentVolumeClaim:
-          claimName: ollama-pvc
+        emptyDir: {}
+        # persistentVolumeClaim:
+        #   claimName: ollama-pvc
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: ollama-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: ollama-pvc
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 10Gi
 ---
 apiVersion: v1
 kind: Service

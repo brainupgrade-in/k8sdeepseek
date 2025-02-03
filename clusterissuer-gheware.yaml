@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  annotations:
+  name: letsencrypt-prod-gheware
+spec:
+  acme:
+    email: admin@gheware.com
+    privateKeySecretRef:
+      name: letsencrypt-prod-gheware
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+    - http01:
+        ingress:
+          class: nginx

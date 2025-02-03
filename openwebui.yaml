@@ -18,6 +18,8 @@ spec:
       - name: openweb-ui
         image: ghcr.io/open-webui/open-webui:main
         env:
+        - name: WEBUI_NAME
+          value: "DeepSeek India - Hardware Software Gheware"        
         - name: OLLAMA_BASE_URL
           value: "http://ollama-service:11434"  
         - name: OLLAMA_DEFAULT_MODEL
@@ -29,18 +31,23 @@ spec:
           mountPath: /app/backend/data
       volumes:
       - name: openweb-data
-        emptyDir: {}
+        persistentVolumeClaim:
+          claimName:  openweb-ui-pvc
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: openweb-ui-pvc
 spec:
+  storageClassName: efs-sc
+  selector:
+    matchLabels:
+      app: openweb-ui  
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 5Gi
+      storage: 10Gi
 ---
 apiVersion: v1
 kind: Service
